@@ -5,6 +5,7 @@ import hmac
 import hashlib
 import struct
 import time
+from cryptography.fernet import Fernet
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-g", help="A hexadecimal key of at least 64 characters is required, .hex file")
