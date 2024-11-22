@@ -5,7 +5,7 @@ import hmac
 import hashlib
 import struct
 import time
-from cryptography.fernet import Fernet
+import base64
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-g", help="A hexadecimal key of at least 64 characters is required, .hex file")
@@ -61,23 +61,24 @@ def open_and_check_file(file_path: str) -> str:
         print(f"Error: file '{file_path}' not found.")
     except ValueError as e:
         print(f"Error: {e}")
-    return ("None")
+    return None
 
 def main():
     if args.g:
         print("\nExtracting and saving key...\n")
         key = open_and_check_file(args.g)
-        if key == "None":
+        if key is None:
             return
+        key_base32 = base64.b32encode(bytes.fromhex(key)).decode('utf-8') # -> to base 32
         with open("ft_otp.key", "w") as file:
-            file.write(key)
+            file.write(key_base32)
             print("Success: key was saved in ft_otp.key\n\n")
 
     if args.k:
         print("Generating one time password...")
-        hex_key = open_and_check_file(args.k)
-        if hex_key == "None":
-            return
+        with open(args.k, "r") as file:
+            encoded_key = file.read().strip()
+        hex_key = base64.b32decode(encoded_key).hex()
         print (f'Hex_key: {hex_key}')
         time_counter = int(time.time() // 30)
         print (f'Time counter: {time_counter}')
