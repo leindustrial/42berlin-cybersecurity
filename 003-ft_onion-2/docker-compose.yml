@@ -1,0 +1,25 @@
+
+services:
+  nginx:
+    image: nginx:stable
+    container_name: nginx-tor
+    ports:
+      - "4243:4242"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - mynetwork
+
+  tor:
+    build:
+      context: .
+      dockerfile: Dockerfile.tor
+    container_name: tor
+    networks:
+      - mynetwork
+
+
+networks:
+  hidden-network:
+    driver: bridge

@@ -1,0 +1,22 @@
+docker build -t nginx-tor .
+
+docker run -d -p 8080:80 --name nginx-tor nginx-tor
+
+http://localhost:8080
+
+
+docker stop nginx-tor
+
+docker rm nginx-tor
+
+docker build -t nginx-tor .
+
+
+
+docker run -d -p 8080:80 -p 9050:9050 --name nginx-tor nginx-tor
+
+
+docker exec -it tor cat /var/lib/tor/hidden_service_http/hostname
+docker exec -it tor cat /var/lib/tor/hidden_service_ssh/hostname
+
+http://d3m4kaq6xwzbjst3kt6ag6avlmybdfcd5iqlt2vpmm5u72mbryabx2yd.onion
