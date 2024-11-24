@@ -1,19 +1,19 @@
 FROM nginx:stable
 
-RUN apt-get update && apt-get install -y tor
 RUN apt-get update && apt-get install -y openssh-server
+RUN mkdir -p /var/run/sshd
+RUN echo "root:rootpasswd" | chpasswd
+#RUN id -u lolale &>/dev/null || useradd -m -p $(openssl passwd -1 'lolalepasswd') lolale
+#RUN id -u lolale &>/dev/null || useradd -m lolale
+#RUN echo "lolale:lolalepasswd" | chpasswd
+#RUN mkdir -p /home/lolale/.ssh
+#RUN chmod 700 /home/lolale/.ssh
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY sshd_config /etc/ssh/sshd_config
 COPY index.html /usr/share/nginx/html/index.html
-COPY juisy-melons.jpg /usr/share/nginx/html/juisy-melons.jpg
-COPY torrc /etc/tor/torrc
-
-RUN mkdir -p /run/sshd
-RUN chmod 0755 /run/sshd
-RUN echo "Port 4243" >> /etc/ssh/sshd_config
-RUN useradd -m lola && echo "lola:lolapasswd" | chpasswd && mkdir -p /home/lola.ssh
+COPY juicy-melons.jpg /usr/share/nginx/html/juicy-melons.jpg
+COPY nginx.conf /etc/nginx/nginx.conf
 
 
 # Start both Tor and Nginx
-CMD service tor start && nginx -g 'daemon off;'
-CMD ["sh", "-c", "service ssh start && service tor start && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "service ssh start && nginx -g 'daemon off;'"]

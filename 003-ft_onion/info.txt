@@ -1,20 +1,9 @@
-docker build -t nginx-tor .
 
-docker run -d -p 8080:80 --name nginx-tor nginx-tor
+to get the address:
+docker exec -it tor cat /var/lib/tor/hidden_service/hostname
 
-http://localhost:8080
-
-
-docker stop nginx-tor
-
-docker rm nginx-tor
-
-docker build -t nginx-tor .
+to ssh:
+ssh -o ProxyCommand='nc -x localhost:9150 %h %p' -p 4242 lolale@z7vifeu625tiyzyku3vfx7fchf5eyiz6udkkxzpmmyn6jjx46stmslid.onion
 
 
-
-docker run -d -p 8080:8080 -p 9050:9050 --name nginx-tor nginx-tor
-
-
-docker exec -it nginx-tor cat /var/lib/tor/hidden_service/hostname
-
+docker-compose down --volumes  -> to remove ssh user
